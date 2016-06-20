@@ -36,7 +36,7 @@ class CPS(object):
             sys.exit(0)
 
     def _get(self):
-        """ requesicao """
+        """ requisicao """
         try:
             data = urllib2.urlopen(self.conf['url']).read()
             return data
@@ -53,7 +53,8 @@ class CPS(object):
         return data
 
     def _linhas(self, data):
-        """ adicionando novas linhas"""
+        """ convertendo a lista para sring cada
+            elemento uma nova linha"""
         return "\n".join(data)
 
     def check_vaga(self):
@@ -70,7 +71,8 @@ class CPS(object):
                 else:
                     if not self.lasthash:
                         dadosantigos = self._linhas(self.carregando_dados())
-                        self.lasthash = hashlib.md5(dadosantigos.encode('utf-8')).hexdigest()
+                        self.lasthash = hashlib.md5(
+                            dadosantigos.encode('utf-8')).hexdigest()
                     data = self._get()
                     parse = self._linhas(self._parse(data))
                     lasthash = hashlib.md5(parse.encode('utf-8')).hexdigest()
@@ -85,13 +87,13 @@ class CPS(object):
             time.sleep(self.conf['periodo'])
 
     def salvar_dados(self, data):
-        """ salvando os ultimos dados"""
+        """ salvando dados"""
         filename = os.path.join(self.folder, self.conf['backup'])
         with io.open(filename, 'w', encoding='utf8') as f:
             f.write(data)
 
     def carregando_dados(self):
-        """ carregando dados que foram salvos para checar vaga """
+        """ carregando dados """
         filename = os.path.join(self.folder, self.conf['backup'])
         with io.open(filename, 'r', encoding='utf8') as f:
             return f.readlines()
@@ -101,5 +103,5 @@ class CPS(object):
         print "Enviando Notificacao."
         gm = Gmail(self.conf['email'], self.conf['password'])
         gm.send_message(self.conf['notificacao'],
-                        'Notificacao Nova Vaga',
+                        'Notificacao Nova Vaga',  # Titulo
                         'Existe algo nova corra: %s' % self.conf['url'])
