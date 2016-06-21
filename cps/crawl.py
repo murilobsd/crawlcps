@@ -70,7 +70,7 @@ class CPS(object):
                     self.salvar_dados(self._linhas(parse))
                 else:
                     if not self.lasthash:
-                        dadosantigos = self._linhas(self.carregando_dados())
+                        dadosantigos = self.carregando_dados()
                         self.lasthash = hashlib.md5(
                             dadosantigos.encode('utf-8')).hexdigest()
                     data = self._get()
@@ -96,7 +96,7 @@ class CPS(object):
         """ carregando dados """
         filename = os.path.join(self.folder, self.conf['backup'])
         with io.open(filename, 'r', encoding='utf8') as f:
-            return f.readlines()
+            return f.read()
 
     def enviar_notificacao(self):
         """ enviando notificacao para usuario """
