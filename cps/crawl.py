@@ -80,6 +80,7 @@ class CPS(object):
                         print "Existe algo novo"
                         self.enviar_notificacao()
                         self.salvar_dados(parse)
+                        self.lasthash = lasthash
             except Exception as e:
                 print "Error: %s" % e
                 pass
